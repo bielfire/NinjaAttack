@@ -1,4 +1,4 @@
-/// Copyright (c) 2018 Razeware LLC
+/// Copyright (c) 2019 Razeware LLC
 /// 
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +26,36 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
-import UIKit
-import SpriteKit
+import CoreGraphics
 
-class GameViewController: UIViewController {
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    let scene = GameScene(size: view.bounds.size)
-    let skView = view as! SKView
-    skView.showsFPS = true
-    skView.showsNodeCount = true
-    skView.ignoresSiblingOrder = true
-    scene.scaleMode = .resizeFill
-    skView.presentScene(scene)
+func +(left: CGPoint, right: CGPoint) -> CGPoint {
+  return CGPoint(x: left.x + right.x, y: left.y + right.y)
+}
+
+func -(left: CGPoint, right: CGPoint) -> CGPoint {
+  return CGPoint(x: left.x - right.x, y: left.y - right.y)
+}
+
+func *(point: CGPoint, scalar: CGFloat) -> CGPoint {
+  return CGPoint(x: point.x * scalar, y: point.y * scalar)
+}
+
+func /(point: CGPoint, scalar: CGFloat) -> CGPoint {
+  return CGPoint(x: point.x / scalar, y: point.y / scalar)
+}
+
+#if !(arch(x86_64) || arch(arm64))
+func sqrt(a: CGFloat) -> CGFloat {
+  return CGFloat(sqrtf(Float(a)))
+}
+#endif
+
+extension CGPoint {
+  func length() -> CGFloat {
+    return sqrt(x*x + y*y)
   }
   
-  override var prefersStatusBarHidden: Bool {
-    return true
+  func normalized() -> CGPoint {
+    return self / length()
   }
-  
 }
